@@ -78,6 +78,14 @@ try{
     $data = null;
     switch($mode){
         
+        case 'root' :
+            $Path = isset($params['path']) ? $params['path'] : null;
+            if(!$Path) throw new \Exception('Не удалось установить корневую папку');
+            dump(RAW_ROOT .'/'. $params['path']);
+            
+            $message = 'Новый корень установлен';
+            break;
+        
         case 'rename' :
             $newid = dirname($params['oldid']) .'/'. $params['newname'];
             $oldpath = $root_path .'/'. $params['oldid'];

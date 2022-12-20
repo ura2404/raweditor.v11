@@ -9,7 +9,7 @@ class Model{
             case 'Data' :
                 return [
                     'now' => date('Y'),
-                    'home' => $this->home(),
+                    'tabTitle' => $this->home(),
                     'whome' => $this->whome(),
                     'version' => '1.1',
                 ];
@@ -19,7 +19,9 @@ class Model{
 
     // --- --- --- --- ---- ---
     function home(){
-                return RAW_ROOT;
+        return '/';
+        return RAW_ROOT;
+        /*
 		$path = __FILE__;
 		$path = str_replace(DIRECTORY_SEPARATOR,'/',dirname($path));
 		$arr1 = explode('/',ltrim($path,'/'));
@@ -27,6 +29,7 @@ class Model{
 		array_pop($arr1);
 		
 		return (DIRECTORY_SEPARATOR === '/' ? '/' : '') .implode('/',$arr1);
+		*/
     }
 
     // --- --- --- --- ---- ---

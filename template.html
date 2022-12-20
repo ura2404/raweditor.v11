@@ -38,36 +38,38 @@
         <script type="text/javascript" src="res/wi.eu.js"></script>
     </head>
 
-    <body class="easyui-layout">
-        <!--
+    <body class="easyui-layout" data-options="border:false">
+        
         <div class="top" data-options="region:'north',border:false">
-            <i class="fa fa-1x fa-delicious"></i>
-            <span>RAW Editor</span>
+            <ul id="cmPath"></ul>
+            <span class="logo">
+                <i class="fa fa-1x fa-delicious"></i>
+            </span>
+            <span>RAW Editor v.1.1</span>
         </div>
-        -->
         <div class="center" data-options="region:'center',border:false">
-            <div class="easyui-tabs" data-options="fit:true,plain:true,_pill:true">
+            <!--<div id="topTab" class="easyui-tabs" data-options="fit:true,plain:true,_pill:true">
                 
-                <div id="filesystem" title="Файловая система [ {{ home }} ]">
+                <div id="filesystem" title="{{ tabTitle }}">-->
                     <div class="easyui-layout" data-options="fit:true">
                         
                         <div class="tree" data-options="region:'west',border:false,split:true,width:200">
-                            <div id="filesystem-tree" class="easyui-tree" data-options="fit:true,_lines:true,url:'ajax/filesystem/tree.php',onClick:filesystem.tree.onClick,onContextMenu:filesystem.tree.onContextMenu">
+                            <div id="filesystem-tree" class="easyui-tree" data-options="fit:true,border:false,lines:true,url:'ajax/filesystem/tree.php',onClick:filesystem.tree.onClick,onContextMenu:filesystem.tree.onContextMenu">
                                 
                             </div>
                         </div>
                         
                         <div class="tabs" data-options="region:'center',border:false">
                             <div id="filesystem-tabs" class="easyui-tabs" 
-                                data-options="fit:true,plain:true,_pill:true,onAdd:filesystem.tabs.onAdd,onSelect:filesystem.tabs.onSelect,onClose:filesystem.tabs.onClose,onBeforeClose:filesystem.tabs.onBeforeClose"
+                                data-options="fit:true,plain:true,border:false,_pill:true,onAdd:filesystem.tabs.onAdd,onSelect:filesystem.tabs.onSelect,onClose:filesystem.tabs.onClose,onBeforeClose:filesystem.tabs.onBeforeClose"
                             >
                             </div>
                         </div>
                         
                     </div>
-                </div>
+                <!--</div>
                 
-            </div>
+            </div>-->
         </div>
 
         <div class="bottom" data-options="region:'south',border:false">
@@ -77,6 +79,8 @@
         <!-- меню для неизменяемой папки -->
         <div id="menu-folder0" class="easyui-menu">
             <div data-options="name:'reload',iconCls:'fa fa-refresh'">Обновить</div>
+            <div class="menu-sep"></div>
+            <div data-options="name:'root',iconCls:'fa fa-long-arrow-up'">Сделать корневой</div>
             <div class="menu-sep"></div>
             <div data-options="name:'folder'">Добавить папку</div>
             <div data-options="name:'file'">Добавить файл</div>
@@ -90,6 +94,8 @@
         <!-- меню для изменяемой папки -->
         <div id="menu-folder1" class="easyui-menu">
             <div data-options="name:'reload',iconCls:'fa fa-refresh'">Обновить</div>
+            <div class="menu-sep"></div>
+            <div data-options="name:'root',iconCls:'fa fa-long-arrow-up'">Сделать корневой</div>
             <div class="menu-sep"></div>
             <div data-options="name:'folder'">Добавить папку</div>
             <div data-options="name:'file'">Добавить файл</div>

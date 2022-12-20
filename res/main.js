@@ -14,7 +14,11 @@ $(document).ready(function(){
     });
     */
     
-    $('#filesystem-tree').tree({
+    $('#filesystem-tree').data('cmRoot','').tree({
+        onBeforeLoad : function(node,params){
+            params.root = $(this).data('cmRoot');
+            //console.log(params);
+        },
         onExpand : function(node){
             //console.log(node.target);
             $(node.target).children(".tree-icon:first").removeClass('fa-folder-o').addClass('fa-folder-open-o');
@@ -37,6 +41,8 @@ $(document).ready(function(){
     $('.top').removeAttr('style');
     
     new App();
+    
+    console.log($('#filesystem-tree').data());
 });
 
 // --- --- --- --- --- --- ---
@@ -326,6 +332,37 @@ Raw.prototype.filesystem.reload = function(item){
     tree.tree('reload',tree_node.target);
 };
 
+Raw.prototype.filesystem.setPath = function(path){
+    const Instance = this;
+    const P = '<li data-id="/">Home</li>' + ( path === '/' ? '' : path.substr(1).split('/').map(function(element,index,arr){
+        return '<li data-id="/' + arr.slice(0,index+1).join('/')+ '">' + element + '</li>';
+    }).join(''));
+    $('#cmPath').html('').html(P);
+    $('#cmPath').on('click','li',function(e){
+        const Id = $(this).data('id');
+        $('#filesystem-tree').data('cmRoot', Id).tree('reload');
+        Instance.setPath(Id);
+    });
+    
+};
+
+Raw.prototype.filesystem.setRoot = function(item){
+    const tree = $('#filesystem-tree');
+    const tree_node = tree.data('tree_node');
+    
+    console.log('setRoot',tree_node.id);
+    $('#filesystem-tree').data('cmRoot', tree_node.id).tree('reload');
+    this.setPath(tree_node.id);
+    /*    
+    const $Tabs = $('#topTab');
+    const Tab = $Tabs.tabs('getSelected');
+    const Index = $Tabs.tabs('getTabIndex',Tab);
+
+	$Tabs.find('.tabs-header ul li').eq(Index)
+	    .find('.tabs-title').text(tree_node.id);
+    */
+};
+
 Raw.prototype.filesystem.upload = function(item){
     var tree = $('#filesystem-tree');
     var tree_node = tree.data('tree_node');
@@ -562,7 +599,7 @@ Raw.prototype.filesystem.get = function(mode,params,callback){
         },
     })
     .done(function(data, textStatus, jqXH){
-        if(typeof callback === 'function') callback(data.data);        
+        if(typeof callback === 'function') callback(data.data);
     })
     .fail(function(jqXHR, textStatus, errorThrown){
     });
@@ -753,8 +790,12 @@ var filesystem = {
     
     tree : {
         onClick : function(node){
+            console.log('click on tree',node.id);
+            
+            //const Root = $('#filesystem-tree').data('cmRoot');
             if(node.type === 'file'){
                 $('#filesystem-tabs').tabs('touch',{
+                    //id : Root + '/' + node.id,
                     id : node.id,
                     title : '<span class="lmarker"></span>'+node.text+'<span class="rmarker"></span>',
                     closable : true,
@@ -784,10 +825,18 @@ var filesystem = {
         onAdd : function(title,index){
             var instance = this;
             
+            const Root = $('#filesystem-tree').data('cmRoot');
+            console.log('Root','>'+Root+'<','>'+Root.substr(1)+'<');
+            
             var id = $(instance).tabs('getIdByIndex',index);
+            console.log('id1',id);
+            console.log('id2','ace-' + id.replace(/\.|\/|\^|\s|=/g,'_'));
+            
+            
             var node = $('#filesystem-tree').tree('find',id);
             var tab = $(instance).tabs('getTab',index);
             
+            console.log('node',node);
             
             if(node.type === 'file'){
                 var ext = node.text.split(".").pop();
@@ -803,8 +852,6 @@ var filesystem = {
                         break;
                         
                     default :
-                    console.log(id);
-                    console.log(id.replace(/\.|\/|^|\s|=/g,'_'));
                         var n_id = 'ace-' + id.replace(/\.|\/|\^|\s|=/g,'_');
                         tab.append('<div id="' +n_id+ '"></div>');
                         
@@ -852,7 +899,7 @@ var filesystem = {
                 opts.onBeforeClose = bc;
             };
             
-            var e = tab.data('e') || {}; // если событие вызываетсф не крестом, то e - отсутствует
+            var e = tab.data('e') || {}; // если событие вызывается не крестом, то e - отсутствует
             var changed = $(editor.Editor).data('changed')
             
             if(changed && !e.ctrlKey){
@@ -905,6 +952,7 @@ var filesystem = {
     menu : {
         onClick : function(item){
             if(item.name === 'reload') new Raw().filesystem.reload(item);
+            if(item.name === 'root') new Raw().filesystem.setRoot(item);
             else if(item.name === 'rename') new Raw().filesystem.rename(item);
             else if(item.name === 'file') new Raw().filesystem.file(item);
             else if(item.name === 'folder') new Raw().filesystem.folder(item);
