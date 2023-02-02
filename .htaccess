@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "RawEditor"
-AuthUserFile /home/ura/__WORK__/raw/.htpasswd
-require valid-user
