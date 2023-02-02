@@ -338,7 +338,7 @@ Raw.prototype.filesystem.setPath = function(path){
         return '<li data-id="/' + arr.slice(0,index+1).join('/')+ '">' + element + '</li>';
     }).join(''));
     $('#cmPath').html('').html(P);
-    $('#cmPath').on('click','li',function(e){
+    $('#cmPath').off('click').on('click','li',function(e){
         const Id = $(this).data('id');
         $('#filesystem-tree').data('cmRoot', Id).tree('reload');
         Instance.setPath(Id);
