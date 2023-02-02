@@ -4,7 +4,11 @@
  * Настроечный скрипт
  */
 
+
 $root = realpath(dirname(__FILE__) .'/..');
+
+copy($root.'/src/.htaccess',$root.'/.htaccess');
+
 $file = file_get_contents($root .'/.htaccess');
 $arr = explode('AuthUserFile ', $file);
 $arr2 = explode(PHP_EOL,$arr[1]);
