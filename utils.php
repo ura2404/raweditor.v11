@@ -896,7 +896,7 @@ function isHID($str){
     * @author ura ura@itx.ru
     * @version 1.0
     */
-    function str_contains($str,$param,$fl=false){
+    function strContains($str,$param,$fl=false){
 	$param = is_array($param) ? $param : array($param);
 	$encoding = mb_detect_encoding($str);
 
